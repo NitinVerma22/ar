@@ -3,17 +3,17 @@ export const config = {
   runtime: "nodejs",
 };
 
-const allowedOrigin = "*"; // or use your domain like "http://localhost:3000"
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+  "Access-Control-Max-Age": "86400",
+};
+
 export async function OPTIONS() {
   return new Response(null, {
-    status: 204,
-    headers: {
-      "Access-Control-Allow-Origin": allowedOrigin,
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers":
-        "content-type, Content-Type, Authorization, X-Requested-With",
-      "Access-Control-Max-Age": "86400",
-    },
+    status: 200, // YE 204 se 200 kar diya
+    headers: CORS_HEADERS,
   });
 }
 
@@ -42,10 +42,7 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify(payload), {
       status: 200,
       headers: {
-        "Access-Control-Allow-Origin": allowedOrigin,
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers":
-          "content-type, Content-Type, Authorization, X-Requested-With",
+        ...CORS_HEADERS,
         "Content-Type": "application/json",
       },
     });
@@ -58,14 +55,10 @@ export async function POST(req: Request) {
       {
         status: 500,
         headers: {
-          "Access-Control-Allow-Origin": allowedOrigin,
-          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-          "Access-Control-Allow-Headers":
-            "content-type, Content-Type, Authorization, X-Requested-With",
+          ...CORS_HEADERS,
           "Content-Type": "application/json",
         },
       }
     );
   }
 }
-
