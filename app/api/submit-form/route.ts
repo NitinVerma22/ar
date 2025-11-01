@@ -1,3 +1,7 @@
+export const config = {
+  runtime: "nodejs", // 👈 Force Node runtime instead of Edge
+};
+
 export async function OPTIONS() {
   return new Response(null, {
     status: 204,
@@ -5,7 +9,6 @@ export async function OPTIONS() {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
-      "Access-Control-Max-Age": "86400", // cache preflight for 24h
     },
   });
 }
@@ -36,8 +39,8 @@ export async function POST(req: Request) {
       status: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
         "Content-Type": "application/json",
       },
     });
@@ -51,8 +54,8 @@ export async function POST(req: Request) {
         status: 500,
         headers: {
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
           "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
           "Content-Type": "application/json",
         },
       }
