@@ -4,7 +4,6 @@ export const config = {
 };
 
 const allowedOrigin = "*"; // or use your domain like "http://localhost:3000"
-
 export async function OPTIONS() {
   return new Response(null, {
     status: 204,
@@ -69,3 +68,4 @@ export async function POST(req: Request) {
     );
   }
 }
+
