@@ -3,8 +3,9 @@ export async function OPTIONS() {
     status: 204,
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+      "Access-Control-Max-Age": "86400", // cache preflight for 24h
     },
   });
 }
@@ -22,36 +23,36 @@ export async function POST(req: Request) {
       }
     );
 
-    // Google Apps Script sometimes returns HTML (error page) → so safely parse:
     const text = await response.text();
 
-    // Try to parse JSON safely
+    let payload: any;
     try {
-      const json = JSON.parse(text);
-      return new Response(JSON.stringify(json), {
-        status: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      });
+      payload = JSON.parse(text);
     } catch {
-      // If not JSON, return as plain text
-      return new Response(text, {
-        status: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "text/plain",
-        },
-      });
+      payload = { message: text };
     }
-  } catch (error) {
+
+    return new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error: any) {
     return new Response(
-      JSON.stringify({ error: "Something went wrong", details: error }),
+      JSON.stringify({
+        error: "Something went wrong",
+        details: error?.message || error,
+      }),
       {
         status: 500,
         headers: {
           "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
           "Content-Type": "application/json",
         },
       }
