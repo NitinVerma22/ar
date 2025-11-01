@@ -1,11 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const config = {
+  runtime: "nodejs",
+};
+
+const allowedOrigin = "*"; // or use your domain like "http://localhost:3000"
+
 export async function OPTIONS() {
   return new Response(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": allowedOrigin,
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
-      "Access-Control-Max-Age": "86400", // cache preflight for 24h
+      "Access-Control-Allow-Headers":
+        "content-type, Content-Type, Authorization, X-Requested-With",
+      "Access-Control-Max-Age": "86400",
     },
   });
 }
@@ -35,9 +43,10 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify(payload), {
       status: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+        "Access-Control-Allow-Origin": allowedOrigin,
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers":
+          "content-type, Content-Type, Authorization, X-Requested-With",
         "Content-Type": "application/json",
       },
     });
@@ -50,9 +59,10 @@ export async function POST(req: Request) {
       {
         status: 500,
         headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+          "Access-Control-Allow-Origin": allowedOrigin,
           "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers":
+            "content-type, Content-Type, Authorization, X-Requested-With",
           "Content-Type": "application/json",
         },
       }
